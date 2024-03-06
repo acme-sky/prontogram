@@ -1,23 +1,34 @@
 interface ProntoInterface{
     RequestResponse:
-        sendNotification(prontoMessage)(prontoResponse)
-        registrationRequest(prontoRequest)(prontoResponse)
-        sendOffer(ASOffer)(prontoResponse)
+        sendNotification(prontoMessage)(prontoResponse),
+        registrationRequest(prontoRequest)(prontoResponse),
+        sendOffer(ASOffer)(prontoResponse),
         loginRequest(prontoRequest)(prontoResponse)
 }
 
 
-type ASOffer{
+type ASOffer : void {
     .DepartureLoc:     string
     .ArrivalLoc:       string
     .DepartureTime:    string
     .OfferPrice:       double
-    .IsLastMinute:?    bool
+    .IsLastMinute:     bool
     .IsValid:          bool
 }
 
+type prontoMessage :void{
+    .text:  string
+}
 
-type User{
+type prontoRequest :void{
+    .text:  string
+}
+
+type prontoResponse :void{
+    .text:  string
+}
+
+type User : void {
     username:       string
     password:       string
 }
