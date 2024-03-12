@@ -1,13 +1,15 @@
 interface ProntoInterface{
     RequestResponse:
-        sendNotification(prontoMessage)(prontoResponse),
-        registrationRequest(prontoRequest)(prontoResponse),
+        //sendNotification(prontoMessage)(prontoResponse),
+        //registrationRequest(prontoRequest)(prontoResponse),
         sendOffer(ASOffer)(prontoResponse),
-        loginRequest(prontoRequest)(prontoResponse)
+        login(loginRequest)(prontoResponse)
 }
 
-
+// need user data to relate an offer
 type ASOffer : void {
+    .customerName:     string
+    .customerSurname:  string
     .DepartureLoc:     string
     .ArrivalLoc:       string
     .DepartureTime:    string
@@ -16,26 +18,34 @@ type ASOffer : void {
     .IsValid:          bool
 }
 
+
+type loginRequest{
+    .username: string
+    .password: string
+}
+
 type prontoMessage :void{
-    .text:  string
+    .text:     string
+    .offer:     ASOffer
 }
 
 type prontoRequest :void{
-    .text:  string
+    .message:  string
+    .sid:   string
+    .type:  string
 }
 
 type prontoResponse :void{
-    .text:  string
+    .message?:  string
+    .Offer?: ASOffer
+    .sid?:   string
 }
+
 
 type User : void {
-    username:       string
-    password:       string
+    .name:           string
+    .surname:        string
+    .username:       string
+    .password:       string
 }
 
-
-// register
-// login
-// getNotification
-
-//sendNotification

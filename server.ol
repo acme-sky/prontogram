@@ -20,12 +20,26 @@ service RestServer {
                     template = "/user/login"
                     method = "post"
                 }
+                getMessages << {
+                    template = "/getMessages"
+                    method = "get"
+                    
+                }
+
             }
         }
         interfaces: ProntoInterface
     }
 
+    cset {
+        //sid = prontoRequest.sid
+    }
+
     init{
+
+        keeprunning = true
+        lock = 1
+
         with(dbconn){
             .username = "pronto"
             .password = "password"
@@ -39,9 +53,37 @@ service RestServer {
     }
 
     main{
-        println@Console("test")()
+        
+        scope(login) {
+            install(
+                SQLException => println@Console("Database error:" + sqlResponse.message )());
+
+                //login 
+                login(loginRequest)(prontoResponse){
+                    searchUserQuery = "SELECT * FROM users WHERE uname = '"+loginRequest.username+"' AND pw = '" + loginRequest.password+ "'"
+                    searchUserQuery.username = loginRequest.username
+                    query@Database(searchUserQuery)(sqlResponse)
+                    //debug
+                    //println@Console("User found")()
+                    //handling user not found
 
 
+
+                    //
+
+                    //session token assignment
+                    sess_id = getRandomUUID@StringUtils()
+                    println@Console(sess_id)()
+                    insertTokenQuery = "UPDATE users SET sess_id = '"+sess_id+"' WHERE uname = '"+loginRequest.username+"'"
+                    //debug
+                    //println@Console(insertTokenQuery)()
+                    update@Database(insertTokenQuery)(updateResponse)
+                    
+                    //feedback
+                    println@Console("User "+username+" logged in.")()
+                    prontoResponse.message = "Successful login"
+            }
+        }
 
 
 
