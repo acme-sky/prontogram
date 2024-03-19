@@ -67,22 +67,42 @@ service RestServer {
                     //println@Console("User found")()
                     //handling user not found
 
-
-
-                    //
+                    println@Console(sqlResponse.message)()
 
                     //session token assignment
                     sess_id = getRandomUUID@StringUtils()
-                    println@Console(sess_id)()
+                    //debug
+                    //println@Console(sess_id)()
                     insertTokenQuery = "UPDATE users SET sess_id = '"+sess_id+"' WHERE uname = '"+loginRequest.username+"'"
                     //debug
                     //println@Console(insertTokenQuery)()
                     update@Database(insertTokenQuery)(updateResponse)
                     
                     //feedback
-                    println@Console("User "+username+" logged in.")()
+                    println@Console("User "+loginRequest.username+" logged in.")()
                     prontoResponse.message = "Successful login"
             }
+        }
+
+        scope (getMessages)
+        {
+             install(
+                SQLException => println@Console("Database error:" + sqlResponse.message )());
+
+
+
+                getMessages(request)(response){
+                    
+                    //get all offers for current user
+                    
+                    //for every offer [cycle]
+
+                    //offer[i].field = value
+
+                    //response = array di offers / errore
+
+
+                }     
         }
 
 

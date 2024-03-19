@@ -8,10 +8,14 @@ interface ProntoInterface{
 
 // need user data to relate an offer
 type ASOffer : void {
+    .offerToker:       int
+    .clientUsername:   string
     .customerName:     string
     .customerSurname:  string
     .DepartureLoc:     string
     .ArrivalLoc:       string
+    .offerTimestamp:   string
+    .offerDuration:    int //hours in int
     .DepartureTime:    string
     .OfferPrice:       double
     .IsLastMinute:     bool
@@ -24,6 +28,11 @@ type loginRequest{
     .password: string
 }
 
+
+type messagesRequest{
+    .username: string
+    .sess_id?: string
+}
 type prontoMessage :void{
     .text:     string
     .offer:     ASOffer
