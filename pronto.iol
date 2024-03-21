@@ -2,11 +2,15 @@ interface ProntoInterface{
     RequestResponse:
         //sendNotification(prontoMessage)(prontoResponse),
         //registrationRequest(prontoRequest)(prontoResponse),
-        sendOffer(ASOffer)(prontoResponse),
-        login(loginRequest)(prontoResponse)
+        //sendOffer(ASOffer)(prontoResponse),
+        login(loginRequest)(prontoResponse),
+        getMessages(messagesRequest)(messagesResponse)
 }
 
-// need user data to relate an offer
+type Session: void{
+    .sid: string
+}
+
 type ASOffer : void {
     .offerToker:       int
     .clientUsername:   string
@@ -30,31 +34,22 @@ type loginRequest{
 
 
 type messagesRequest{
-    .username: string
-    .sess_id?: string
+    //.username: string
+    .sid?: string
 }
+
 type prontoMessage :void{
     .text:     string
     .offer:     ASOffer
 }
 
-type prontoRequest :void{
-    .message:  string
-    .sid:   string
-    .type:  string
+type messagesResponse :void{
+    userID?:     string
+    offers[0,*]: prontoMessage
 }
 
 type prontoResponse :void{
     .message?:  string
-    .Offer?: ASOffer
-    .sid?:   string
+    .Offer?:    ASOffer
+    .sid:       string
 }
-
-
-type User : void {
-    .name:           string
-    .surname:        string
-    .username:       string
-    .password:       string
-}
-

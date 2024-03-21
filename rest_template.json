@@ -1,0 +1,10 @@
+{
+    "login": {
+        "method":"post",
+        "template": "/login"
+    },
+    "getMessages": {
+        "method":"get",
+        "template":"/getMessages"
+    }
+}
