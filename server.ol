@@ -12,24 +12,8 @@ service RestServer {
         protocol: http{
             .format = "json"
             .cookies.session = "sid"
-            /*osc << {
-                register << {
-                    template = "/user/register"
-                    method = "post"
-                }
-                login << {
-                    template = "/user/login"
-                    method = "post"
-                }
-                getMessages << {
-                    template = "/getMessages/user"
-                    method = "get"
-                    
-                }
-
-            }*/
+            //TODO cookies-duration
         }
-        //protocol: sodep
         interfaces: ProntoInterface
     }
 
@@ -40,9 +24,9 @@ service RestServer {
     init{
 
         install(
-            SQLException => println@Console("Database error:" + sqlResponse.message )());
+            SQLException => println@Console("Database error:" + sqlResponse.row[0] )());
         keeprunning = true
-        lock = 1
+        
 
         with(dbconn){
             .username = "pronto"
@@ -54,6 +38,7 @@ service RestServer {
 
         connect@Database(dbconn)(void)
         println@Console("connected to db")()
+    
     }
 
     main{
@@ -62,29 +47,21 @@ service RestServer {
         [login(loginRequest)(prontoResponse){
             
             searchUserQuery = "SELECT * FROM users WHERE uname = '"+loginRequest.username+"' AND pw = '" + loginRequest.password+ "'"                
-            searchUserQuery.username = loginRequest.username
+            //searchUserQuery.username = loginRequest.username
             query@Database(searchUserQuery)(sqlResponse)
-                //debug
-                //println@Console("User found")()
                 //handling user not found
 
             println@Console(sqlResponse.message)()
 
-                //session token assignment
+            //session token assignment
             sess_id = getRandomUUID@StringUtils()
-                //debug
-                //println@Console(sess_id)()
 
-                //insert sessid token in response
-                //prontoResponse.@headers["Set-Cookie"] = "sessionID=" + sess_id
-                
             insertTokenQuery = "UPDATE users SET sess_id = '"+sess_id+"' WHERE uname = '"+loginRequest.username+"'"
-                //debug
-                //println@Console(insertTokenQuery)()
             update@Database(insertTokenQuery)(updateResponse)
-                    
-                    
-                //feedback
+
+            //adds user to the global user registered array                    
+            global.users.(sess_id).username = loginRequest.username
+
             println@Console("User "+loginRequest.username+" logged in.")()
             prontoResponse.message = "Successful login"
             prontoResponse.sid = sess_id
@@ -97,19 +74,26 @@ service RestServer {
         [getMessages(request)(response){            
             scope (getMessages)
             {
-                install(SQLException => println@Console("Database error:" + sqlResponse.message )());
-                    //get all offers for current user
-                    valueToPrettyString@StringUtils(request)(res)
-                    println@Console(res)()
-                    //for every offer [cycle]
-                    cookie = request.sid
-                    println@Console(cookie)()
+                install(SQLException => println@Console("Database error:" + sqlResponse.row[0] )());
+
                     //get username from cookie
-                    
+                    cookie = request.sid
+                    username = global.users.(cookie).username
+                    //debug
+                    //println@Console(cookie)()
+                    messagesQuery = "SELECT * FROM ASOffers WHERE client_username = '"+username+"'" 
+                    println@Console(messagesQuery)()
+                    query@Database(messagesQuery)(sqlResponse)
+                    //working
+                    //response.values -> sqlResponse.row
+                    response.offers -> sqlResponse.row
+                    /*can be used to map offers to an offer structure if needed
+                    for(element in sqlResponse.row){
+                        valueToPrettyString@StringUtils(element)(res)
+                        println@Console(res)()
+                    }*/
+
                     //handle no username error
-                                        
-                    //messagesQuery = "select * from ASOffers where "
-                    //offer[i].field = value
 
                     //response = array di offers / errore
 
