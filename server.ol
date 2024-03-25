@@ -24,10 +24,9 @@ service RestServer {
     init{
 
         install(
-            SQLException => println@Console("Database error:" + sqlResponse.row[0] )());
-        keeprunning = true
+            ConnectionError => println@Console("Connection error.")()
+        );
         
-
         with(dbconn){
             .username = "pronto"
             .password = "password"
@@ -42,29 +41,35 @@ service RestServer {
     }
 
     main{
+        
 
-        //login 
+
         [login(loginRequest)(prontoResponse){
-            
+            scope (login) {
+                install (NoUserFound => println@Console("User not found.")());
             searchUserQuery = "SELECT * FROM users WHERE uname = '"+loginRequest.username+"' AND pw = '" + loginRequest.password+ "'"                
-            //searchUserQuery.username = loginRequest.username
+
             query@Database(searchUserQuery)(sqlResponse)
-                //handling user not found
+            
+            //handling user not found
+            if(#sqlResponse.row == 0){
+                prontoResponse.message = "User "+loginRequest.username+" not found."
+                throw (NoUserFound)
+            }else {
+                sess_id = getRandomUUID@StringUtils()
 
-            println@Console(sqlResponse.message)()
+                insertTokenQuery = "UPDATE users SET sess_id = '"+sess_id+"' WHERE uname = '"+loginRequest.username+"'"
+                update@Database(insertTokenQuery)(updateResponse)
 
-            //session token assignment
-            sess_id = getRandomUUID@StringUtils()
+                //adds user to the global user registered array                    
+                global.users.(sess_id).username = loginRequest.username
 
-            insertTokenQuery = "UPDATE users SET sess_id = '"+sess_id+"' WHERE uname = '"+loginRequest.username+"'"
-            update@Database(insertTokenQuery)(updateResponse)
-
-            //adds user to the global user registered array                    
-            global.users.(sess_id).username = loginRequest.username
-
-            println@Console("User "+loginRequest.username+" logged in.")()
-            prontoResponse.message = "Successful login"
-            prontoResponse.sid = sess_id
+                println@Console("User "+loginRequest.username+" logged in.")()
+                prontoResponse.message = "Successful login"
+                prontoResponse.sid = sess_id
+                
+            }
+            }
         }]
         
 
@@ -74,32 +79,54 @@ service RestServer {
         [getMessages(request)(response){            
             scope (getMessages)
             {
-                install(SQLException => println@Console("Database error:" + sqlResponse.row[0] )());
+                install(
+                    SQLException => println@Console("Database error:" )(),
+                    NoCookie => println@Console("User is not authenticated")());
 
                     //get username from cookie
                     cookie = request.sid
-                    username = global.users.(cookie).username
-                    //debug
-                    //println@Console(cookie)()
-                    messagesQuery = "SELECT * FROM ASOffers WHERE client_username = '"+username+"'" 
-                    println@Console(messagesQuery)()
-                    query@Database(messagesQuery)(sqlResponse)
-                    //working
-                    //response.values -> sqlResponse.row
-                    response.offers -> sqlResponse.row
-                    /*can be used to map offers to an offer structure if needed
-                    for(element in sqlResponse.row){
-                        valueToPrettyString@StringUtils(element)(res)
-                        println@Console(res)()
-                    }*/
+                    uname = global.users.(cookie).username
 
-                    //handle no username error
+                    if(!cookie){
+                        response.message = "User is not authenticated. Please login."
+                        throw (NoCookie)
+                    }else{
+                        messagesQuery = "SELECT * FROM ASOffers WHERE client_username = '"+uname+"'" 
+                        println@Console(messagesQuery)()
+                        query@Database(messagesQuery)(sqlResponse)
 
-                    //response = array di offers / errore
+                        response.offers -> sqlResponse.row
 
+                        /*can be used to map offers to an offer structure if needed
+                        for(element in sqlResponse.row){
+                            valueToPrettyString@StringUtils(element)(res)
+                            println@Console(res)()
+                        }*/
 
+                        //handle no username error
+                    }
             }
+        }]
+
+        [register (request)(response) {
+
+            queryCheck = "SELECT * FROM users WHERE username ='"+request.username+"'"
+            query@Database(queryCheck)(checkResponse)
+            //user already registered error
+
+
+            //register new user
+            //insert query
+            //feedback 
+
+
         }]     
+
+
+
+
+        //logout
+        //clear sessid
     }
 
 }

@@ -1,7 +1,8 @@
 interface ProntoInterface{
     RequestResponse:
         login(loginRequest)(prontoResponse),
-        getMessages(messagesRequest)(undefined)
+        getMessages(messagesRequest)(undefined),
+        register(registerRequest)(prontoResponse)
 }
 
 type Session: void{
@@ -29,6 +30,10 @@ type loginRequest{
     .password: string
 }
 
+type registerRequest{
+    .username: string
+    .password: string
+}
 
 type messagesRequest{
     .username?: string
