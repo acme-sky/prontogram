@@ -1,8 +1,8 @@
 CREATE TABLE users(
-    uname TEXT PRIMARY KEY,
-    pw TEXT,
-    name TEXT,
-    surname TEXT,
+    uname TEXT PRIMARY KEY NOT NULL,
+    pw TEXT NOT NULL,
+    name TEXT NOT NULL,
+    surname TEXT NOT NULL,
     sess_id UUID UNIQUE
 );
 

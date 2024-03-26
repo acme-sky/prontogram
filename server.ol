@@ -18,7 +18,7 @@ service RestServer {
     }
 
     cset {
-        session: Session.sid prontoResponse.sid
+        session: prontoResponse.sid logoutRequest.sid messagesRequest.sid
     }
 
     init{
@@ -36,7 +36,7 @@ service RestServer {
         }
 
         connect@Database(dbconn)(void)
-        println@Console("connected to db")()
+        println@Console("Connected to db " +dbconn.database)()
     
     }
 
@@ -81,18 +81,17 @@ service RestServer {
             {
                 install(
                     SQLException => println@Console("Database error:" )(),
-                    NoCookie => println@Console("User is not authenticated")());
+                    NoCookieException => println@Console("User is not authenticated")());
 
                     //get username from cookie
                     cookie = request.sid
                     uname = global.users.(cookie).username
 
-                    if(!cookie){
+                    if(cookie = ""){
                         response.message = "User is not authenticated. Please login."
-                        throw (NoCookie)
+                        throw (NoCookieException)
                     }else{
                         messagesQuery = "SELECT * FROM ASOffers WHERE client_username = '"+uname+"'" 
-                        println@Console(messagesQuery)()
                         query@Database(messagesQuery)(sqlResponse)
 
                         response.offers -> sqlResponse.row
@@ -109,24 +108,52 @@ service RestServer {
         }]
 
         [register (request)(response) {
+            
+            scope(register){
+                install(
+                    SQLException => println@Console("Database error:" )(),
+                    UsernameNotAvailableException => println@Console("Username not available")());
 
-            queryCheck = "SELECT * FROM users WHERE username ='"+request.username+"'"
-            query@Database(queryCheck)(checkResponse)
-            //user already registered error
+                    queryCheck = "SELECT * FROM users WHERE uname ='"+request.username+"'"
+                    query@Database(queryCheck)(checkResponse)
+                    if(#checkResponse.row != 0){
+                        response.message = "Username not available."
+                        throw (UsernameNotAvailableException)
+                    }else{
+                        registerQuery = "INSERT INTO users VALUES (:username, :password, :name, :surname)"
+                        registerQuery.username = request.username
+                        registerQuery.password = request.password
+                        registerQuery.name = request.name
+                        registerQuery.surname = request.surname
+                        update@Database(registerQuery)(ret)
+                        if(ret == 0){
+                            response.message = "Registration failed. Please Try again"
+                            throw(SQLException)
+                        }
 
-
-            //register new user
-            //insert query
-            //feedback 
-
-
+                        response.message = "User "+request.username+" registered correctly"
+                    }
+            }
         }]     
 
 
+        [logout (request)(response){
+            scope(logout){
+                install(
+                    SQLException => println@Console("Database error:" )(),
+                    UserNotFoundException => println@Console("User "+request.username+" not found.")());
 
-
-        //logout
-        //clear sessid
+                uname = global.users.(request.sid).username
+                logoutQuery = "UPDATE users SET sess_id = NULL where uname = '"+uname+"'"
+                update@Database(logoutQuery)(result)
+                if(result == 0) {
+                    response.message = "Logout failed. Please check username"
+                } else {
+                    response.message = "Logout successful"
+                    global.users.(request.sid) = void
+                 }
+            }
+        }]
     }
 
 }
