@@ -26,7 +26,8 @@ service RestServer {
         install(
             ConnectionError => println@Console("Connection error.")()
         );
-        
+
+        //TODO parametric connection with .env 
         with(dbconn){
             .username = "pronto"
             .password = "password"
