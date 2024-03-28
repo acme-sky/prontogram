@@ -1,11 +1,3 @@
-interface ProntoInterface{
-    RequestResponse:
-        login(loginRequest)(prontoResponse),
-        getMessages(messagesRequest)(undefined),
-        register(registerRequest)(prontoResponse),
-        logout(logoutRequest)(prontoResponse)
-}
-
 type ASOffer : void {
     .offerToken:       int
     .clientUsername:   string
@@ -23,8 +15,9 @@ type ASOffer : void {
 
 
 type loginRequest{
-    .username: string
-    .password: string
+    .username?: string
+    .password?: string
+    .sid?:     string
 }
 
 type logoutRequest{
@@ -41,11 +34,19 @@ type registerRequest{
 
 type messagesRequest{
     .username?: string
-    .sid: string
+    .sid?: string
 }
 
 type prontoResponse :void{
     .message?:  string
     .Offer?:    ASOffer
     .sid?:       string
+}
+
+interface ProntoInterface{
+    RequestResponse:
+        login(loginRequest)(prontoResponse),
+        getMessages(messagesRequest)(undefined),//(undefined),
+        register(registerRequest)(prontoResponse),
+        logout(logoutRequest)(prontoResponse)
 }

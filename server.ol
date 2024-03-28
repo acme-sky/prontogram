@@ -8,7 +8,7 @@ execution { concurrent }
 service RestServer {
 
     inputPort WebPort{
-        location: "socket://localhost:8000"
+        location: "local"
         protocol: http{
             .format = "json"
             .cookies.session = "sid"
@@ -38,7 +38,6 @@ service RestServer {
 
         connect@Database(dbconn)(void)
         println@Console("Connected to db " +dbconn.database)()
-    
     }
 
     main{
@@ -48,8 +47,9 @@ service RestServer {
         [login(loginRequest)(prontoResponse){
             scope (login) {
                 install (NoUserFound => println@Console("User not found.")());
-            searchUserQuery = "SELECT * FROM users WHERE uname = '"+loginRequest.username+"' AND pw = '" + loginRequest.password+ "'"                
 
+            searchUserQuery = "SELECT * FROM users WHERE uname = '"+loginRequest.username+"' AND pw = '" + loginRequest.password+ "'"
+              
             query@Database(searchUserQuery)(sqlResponse)
             
             //handling user not found
@@ -155,6 +155,10 @@ service RestServer {
                  }
             }
         }]
+    
+
+
     }
+ 
 
 }

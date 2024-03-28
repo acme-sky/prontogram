@@ -14,25 +14,20 @@ type ASOffer:void {
 }
 
 type loginRequest:void {
-  .password[1,1]:string
-  .username[1,1]:string
+  .password[0,1]:string
+  .username[0,1]:string
+  .sid[0,1]:string
 }
-
-type loginRequest:loginRequest
 
 type logoutRequest:void {
   .username[0,1]:string
   .sid[1,1]:string
 }
 
-type logoutRequest:logoutRequest
-
 type messagesRequest:void {
   .username[0,1]:string
-  .sid[1,1]:string
+  .sid[0,1]:string
 }
-
-type messagesRequest:messagesRequest
 
 type prontoResponse:void {
   .Offer[0,1]:ASOffer
@@ -40,16 +35,12 @@ type prontoResponse:void {
   .sid[0,1]:string
 }
 
-type prontoResponse:prontoResponse
-
 type registerRequest:void {
   .password[1,1]:string
   .surname[1,1]:string
   .name[1,1]:string
   .username[1,1]:string
 }
-
-type registerRequest:registerRequest
 
 interface WebPortInterface {
 RequestResponse:
@@ -63,9 +54,40 @@ RequestResponse:
 
 outputPort WebPort {
   Protocol:http
-  Location:"socket://localhost:8000"
+  Location:"local"
   Interfaces:WebPortInterface
 }
 
 
+type incomingHeaderHandlerRequest:void {
+  .headers[1,1]:undefined
+  .operation[1,1]:string
+}
+
+type incomingHeaderHandlerResponse:undefined
+
+type outgoingHeaderHandlerRequest:void {
+  .response[0,1]:undefined
+  .operation[1,1]:string
+}
+
+type outgoingHeaderHandlerResponse:undefined
+
+interface HeaderPortInterface {
+RequestResponse:
+  incomingHeaderHandler( incomingHeaderHandlerRequest )( incomingHeaderHandlerResponse ),
+  outgoingHeaderHandler( outgoingHeaderHandlerRequest )( outgoingHeaderHandlerResponse )
+}
+
+
+
+outputPort HeaderPort {
+  Protocol:sodep
+  Location:"local"
+  Interfaces:HeaderPortInterface
+}
+
+
 embedded { Jolie: "server.ol" in WebPort }
+
+embedded { Jolie: "RestHandler.ol" in HeaderPort }
