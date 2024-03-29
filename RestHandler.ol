@@ -29,7 +29,7 @@ inputPort HeaderPort {
 execution { concurrent }
 main{
     [incomingHeaderHandler(request)(response){
-        if ( request.operation == "login") {
+        if ( request.operation == "login" ){//|| request.operation == "getMessages" || request.operation == "logout") {
             //get encoded credentials
             splitReq = request.headers.("authorization")
             splitReq.regex = " "
@@ -42,9 +42,11 @@ main{
             split@StringUtils(splitReq2)(decodedCredentials)
             response.username = decodedCredentials.result[0]
             response.password = decodedCredentials.result[1]
-        }else if (request.operation == "getMessages"){
-            response.sid = request.headers.cookies.session
-        }
+        } else if (request.operation == "getMessages" || request.operation == "logout"){
+                response.sid = request.headers.cookies.session
+                valueToPrettyString@StringUtils(response)(res)
+                println@Console(res)()
+            }
     }]
 
     [outgoingHeaderHandler(request)(response){

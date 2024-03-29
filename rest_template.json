@@ -5,7 +5,7 @@
     },
     "getMessages": {
         "method":"get",
-        "template":"/getMessages"
+        "template":"/getMessages/{username}"
     },
     "register": {
         "method":"get",
@@ -13,6 +13,6 @@
     },
     "logout": {
         "method":"post",
-        "template": "/logout"
+        "template": "/login"
     }
 }

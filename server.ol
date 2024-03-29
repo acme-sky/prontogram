@@ -86,8 +86,11 @@ service RestServer {
 
                     //get username from cookie
                     cookie = request.sid
-                    uname = global.users.(cookie).username
+                    //usable
+                    //uname = global.users.(cookie).username
 
+                    //we need this for the openapi specification
+                    uname = request.username
                     if(cookie = ""){
                         response.message = "User is not authenticated. Please login."
                         throw (NoCookieException)
@@ -102,12 +105,12 @@ service RestServer {
                             valueToPrettyString@StringUtils(element)(res)
                             println@Console(res)()
                         }*/
-
-                        //handle no username error
                     }
             }
         }]
 
+
+        //works with form data passed as body 
         [register (request)(response) {
             
             scope(register){
@@ -143,10 +146,11 @@ service RestServer {
                 install(
                     SQLException => println@Console("Database error:" )(),
                     UserNotFoundException => println@Console("User "+request.username+" not found.")());
-
+                
                 uname = global.users.(request.sid).username
                 logoutQuery = "UPDATE users SET sess_id = NULL where uname = '"+uname+"'"
                 update@Database(logoutQuery)(result)
+
                 if(result == 0) {
                     response.message = "Logout failed. Please check username"
                 } else {

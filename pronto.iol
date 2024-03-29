@@ -1,3 +1,5 @@
+
+/*if needed for offers manipulation
 type ASOffer : void {
     .offerToken:       int
     .clientUsername:   string
@@ -11,7 +13,7 @@ type ASOffer : void {
     .OfferPrice:       double
     .IsLastMinute:     bool
     .IsValid:          bool
-}
+}*/
 
 
 type loginRequest{
@@ -22,7 +24,7 @@ type loginRequest{
 
 type logoutRequest{
     .username?: string
-    .sid:      string
+    .sid?:      string
 }
 
 type registerRequest{
@@ -34,19 +36,18 @@ type registerRequest{
 
 type messagesRequest{
     .username?: string
-    .sid?: string
+    .sid?:      string
 }
 
 type prontoResponse :void{
     .message?:  string
-    .Offer?:    ASOffer
     .sid?:       string
 }
 
 interface ProntoInterface{
     RequestResponse:
         login(loginRequest)(prontoResponse),
-        getMessages(messagesRequest)(undefined),//(undefined),
+        getMessages(messagesRequest)(undefined),
         register(registerRequest)(prontoResponse),
         logout(logoutRequest)(prontoResponse)
 }

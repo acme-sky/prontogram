@@ -21,7 +21,7 @@ type loginRequest:void {
 
 type logoutRequest:void {
   .username[0,1]:string
-  .sid[1,1]:string
+  .sid[0,1]:string
 }
 
 type messagesRequest:void {
