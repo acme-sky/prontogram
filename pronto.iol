@@ -17,9 +17,9 @@ type ASOffer : void {
 
 
 type loginRequest{
-    .username?: string
-    .password?: string
-    .sid?:     string
+    .username: string
+    .password: string
+    //.sid?:     string
 }
 
 type logoutRequest{
@@ -35,12 +35,12 @@ type registerRequest{
 }
 
 type messagesRequest{
-    .username?: string
+    .username: string
     .sid?:      string
 }
 
 type prontoResponse :void{
-    .message?:  string
+    .message:  string
     .sid?:       string
 }
 

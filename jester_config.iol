@@ -1,22 +1,6 @@
-type ASOffer:void {
-  .customerSurname[1,1]:string
-  .DepartureTime[1,1]:string
-  .DepartureLoc[1,1]:string
-  .clientUsername[1,1]:string
-  .offerToken[1,1]:int
-  .offerDuration[1,1]:int
-  .offerTimestamp[1,1]:string
-  .OfferPrice[1,1]:double
-  .customerName[1,1]:string
-  .IsLastMinute[1,1]:bool
-  .ArrivalLoc[1,1]:string
-  .IsValid[1,1]:bool
-}
-
 type loginRequest:void {
-  .password[0,1]:string
-  .username[0,1]:string
-  .sid[0,1]:string
+  .password[1,1]:string
+  .username[1,1]:string
 }
 
 type logoutRequest:void {
@@ -25,13 +9,12 @@ type logoutRequest:void {
 }
 
 type messagesRequest:void {
-  .username[0,1]:string
+  .username[1,1]:string
   .sid[0,1]:string
 }
 
 type prontoResponse:void {
-  .Offer[0,1]:ASOffer
-  .message[0,1]:string
+  .message[1,1]:string
   .sid[0,1]:string
 }
 
