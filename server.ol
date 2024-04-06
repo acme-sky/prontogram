@@ -54,7 +54,7 @@ service RestServer {
             
             //handling user not found
             if(#sqlResponse.row == 0){
-                prontoResponse.message = "User "+loginRequest.username+" not found."
+                prontoResponse.message = "Wrong credentials. Please check username and password" 
                 throw (NoUserFound)
             }else {
                 sess_id = getRandomUUID@StringUtils()

@@ -1,18 +1,18 @@
 {
     "login": {
         "method":"post",
-        "template": "/login"
+        "template": "api/login"
     },
     "getMessages": {
         "method":"get",
-        "template":"/getMessages/{username}"
+        "template":"api/getMessages/{username}"
     },
     "register": {
         "method":"get",
-        "template":"/register"
+        "template":"api/register"
     },
     "logout": {
         "method":"post",
-        "template": "/login"
+        "template": "api/logout"
     }
 }

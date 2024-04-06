@@ -19,6 +19,7 @@ type ASOffer : void {
 type loginRequest{
     .username: string
     .password: string
+    .headers?:  undefined
     //.sid?:     string
 }
 
@@ -44,10 +45,16 @@ type prontoResponse :void{
     .sid?:       string
 }
 
+type options_type :void{
+    message?:   string
+    values:     undefined
+}
+
 interface ProntoInterface{
     RequestResponse:
         login(loginRequest)(prontoResponse),
         getMessages(messagesRequest)(undefined),
         register(registerRequest)(prontoResponse),
-        logout(logoutRequest)(prontoResponse)
+        logout(logoutRequest)(prontoResponse),
+        login_options(options_type)(options_type)
 }

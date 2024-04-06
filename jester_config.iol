@@ -1,4 +1,5 @@
 type loginRequest:void {
+  .headers[0,1]:undefined
   .password[1,1]:string
   .username[1,1]:string
 }
@@ -11,6 +12,11 @@ type logoutRequest:void {
 type messagesRequest:void {
   .username[1,1]:string
   .sid[0,1]:string
+}
+
+type options_type:void {
+  .values[1,1]:undefined
+  .message[0,1]:string
 }
 
 type prontoResponse:void {
@@ -29,6 +35,7 @@ interface WebPortInterface {
 RequestResponse:
   getMessages( messagesRequest )( undefined ),
   login( loginRequest )( prontoResponse ),
+  login_options( options_type )( options_type ),
   logout( logoutRequest )( prontoResponse ),
   register( registerRequest )( prontoResponse )
 }
