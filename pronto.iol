@@ -43,12 +43,9 @@ type messagesRequest{
 type prontoResponse :void{
     .message:  string
     .sid?:       string
+    status?:    int
 }
 
-type options_type :void{
-    message?:   string
-    values:     undefined
-}
 
 interface ProntoInterface{
     RequestResponse:
@@ -56,5 +53,4 @@ interface ProntoInterface{
         getMessages(messagesRequest)(undefined),
         register(registerRequest)(prontoResponse),
         logout(logoutRequest)(prontoResponse),
-        login_options(options_type)(options_type)
 }

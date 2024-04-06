@@ -46,7 +46,8 @@ service RestServer {
 
         [login(loginRequest)(prontoResponse){
             scope (login) {
-                install (NoUserFound => println@Console("User not found.")());
+                install (NoUserFound => println@Console("User not found.")()
+                        prontoResponse.status = 1);
 
             searchUserQuery = "SELECT * FROM users WHERE uname = '"+loginRequest.username+"' AND pw = '" + loginRequest.password+ "'"
               
@@ -116,7 +117,8 @@ service RestServer {
             scope(register){
                 install(
                     SQLException => println@Console("Database error:" )(),
-                    UsernameNotAvailableException => println@Console("Username not available")());
+                    UsernameNotAvailableException => println@Console("Username not available")()
+                    response.status = 1);
 
                     queryCheck = "SELECT * FROM users WHERE uname ='"+request.username+"'"
                     query@Database(queryCheck)(checkResponse)

@@ -14,14 +14,10 @@ type messagesRequest:void {
   .sid[0,1]:string
 }
 
-type options_type:void {
-  .values[1,1]:undefined
-  .message[0,1]:string
-}
-
 type prontoResponse:void {
   .message[1,1]:string
   .sid[0,1]:string
+  .status[0,1]:int
 }
 
 type registerRequest:void {
@@ -35,7 +31,6 @@ interface WebPortInterface {
 RequestResponse:
   getMessages( messagesRequest )( undefined ),
   login( loginRequest )( prontoResponse ),
-  login_options( options_type )( options_type ),
   logout( logoutRequest )( prontoResponse ),
   register( registerRequest )( prontoResponse )
 }
