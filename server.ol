@@ -148,7 +148,8 @@ service RestServer {
             scope(logout){
                 install(
                     SQLException => println@Console("Database error:" )(),
-                    UserNotFoundException => println@Console("User "+request.username+" not found.")());
+                    UserNotFoundException => println@Console("User "+request.username+" not found.")()
+                            response.status = 1);
                 
                 uname = global.users.(request.sid).username
                 logoutQuery = "UPDATE users SET sess_id = NULL where uname = '"+uname+"'"
