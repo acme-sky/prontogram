@@ -46,7 +46,12 @@ main{
             getJsonValue@JsonUtils(request.headers.("data"))(credentials)
             response.username = credentials.username
             response.password = credentials.password
-
+        } else if (request.operation == "api/register") {
+            getJsonValue@JsonUtils(request.headers.("data"))(credentials)
+            response.username = credentials.username
+            response.password = credentials.password
+            response.name = credentials.name
+            response.surname = credentials.surname
         } else if (request.operation == "getMessages" || request.operation == "logout"){
                 response.sid = request.headers.cookies.session
             }

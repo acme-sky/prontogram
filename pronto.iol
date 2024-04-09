@@ -43,7 +43,7 @@ type messagesRequest{
 type prontoResponse :void{
     .message:  string
     .sid?:       string
-    status?:    int
+    .status?:    int
 }
 
 

@@ -8,7 +8,7 @@
         "template":"api/getMessages/{username}"
     },
     "register": {
-        "method":"get",
+        "method":"post",
         "template":"api/register"
     },
     "logout": {

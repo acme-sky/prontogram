@@ -25,5 +25,6 @@ CREATE TABLE ASoffers(
 );
 -- for debug purposes
 INSERT into users VALUES ('davide', 'pw', 'Davide', 'Spada');
+INSERT into users VALUES ('dav', 'pw', 'Davide', 'Spada');
 INSERT into ASoffers VALUES (006 ,'davide', 'Davide', 'Spada', 'Napoli', 'Bologna', '2024-03-19 13:03:27.236215+00', 12, '2024-03-19 13:03:27.236215+00', 1773.69, FALSE, TRUE );
 INSERT into ASoffers VALUES (007 ,'davide', 'Davide', 'Spada', 'Napoli', 'Bologna', '2024-03-19 13:03:27.236215+00', 24, '2024-03-19 13:03:27.236215+00', 1773.69, FALSE, TRUE );

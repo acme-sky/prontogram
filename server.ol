@@ -84,14 +84,15 @@ service RestServer {
                 install(
                     SQLException => println@Console("Database error:" )(),
                     NoCookieException => println@Console("User is not authenticated")());
+                    
 
                     //get username from cookie
                     cookie = request.sid
                     //usable
-                    //uname = global.users.(cookie).username
+                    uname = global.users.(cookie).username
 
                     //we need this for the openapi specification
-                    uname = request.username
+                    //uname = request.username
                     if(cookie = ""){
                         response.message = "User is not authenticated. Please login."
                         throw (NoCookieException)
@@ -118,7 +119,7 @@ service RestServer {
                 install(
                     SQLException => println@Console("Database error:" )(),
                     UsernameNotAvailableException => println@Console("Username not available")()
-                    response.status = 1);
+                            response.status = 1);
 
                     queryCheck = "SELECT * FROM users WHERE uname ='"+request.username+"'"
                     query@Database(queryCheck)(checkResponse)
