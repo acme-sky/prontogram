@@ -97,10 +97,11 @@ service RestServer {
                         response.message = "User is not authenticated. Please login."
                         throw (NoCookieException)
                     }else{
-                        messagesQuery = "SELECT * FROM ASOffers WHERE client_username = '"+uname+"'" 
+                        //messagesQuery = "SELECT * FROM ASOffers WHERE client_username = '"+uname+"'" 
+                        messagesQuery = "SELECT * FROM messages WHERE username = '"+uname+"'"
                         query@Database(messagesQuery)(sqlResponse)
 
-                        response.offers -> sqlResponse.row
+                        response.messages -> sqlResponse.row
 
                         /*can be used to map offers to an offer structure if needed
                         for(element in sqlResponse.row){

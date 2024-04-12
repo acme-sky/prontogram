@@ -6,25 +6,18 @@ CREATE TABLE users(
     sess_id UUID UNIQUE
 );
 
-
-CREATE TABLE ASoffers(
-    offer_token INTEGER PRIMARY KEY, 
-    client_username TEXT NOT NULL,
-    client_name TEXT NOT NULL,
-    client_surname TEXT NOT NULL,
-    departure_location TEXT NOT NULL,
-    arrival_location TEXT NOT NULL,
-    offer_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    offer_duration INTEGER NOT NULL,
-    departure_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    offer_price FLOAT NOT NULL,
-    is_last_minute BOOLEAN NOT NULL,
-    is_valid BOOLEAN NOT NULL DEFAULT TRUE,
+CREATE TABLE messages(
+    full_text   TEXT NOT NULL,
+    username    TEXT NOT NULL,
+    expiring_date   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_users_id
-        FOREIGN KEY(client_username) REFERENCES users(uname)
+        FOREIGN KEY(username) REFERENCES users(uname)
 );
 -- for debug purposes
 INSERT into users VALUES ('davide', 'pw', 'Davide', 'Spada');
 INSERT into users VALUES ('dav', 'pw', 'Davide', 'Spada');
-INSERT into ASoffers VALUES (006 ,'davide', 'Davide', 'Spada', 'Napoli', 'Bologna', '2024-03-19 13:03:27.236215+00', 12, '2024-03-19 13:03:27.236215+00', 1773.69, FALSE, TRUE );
-INSERT into ASoffers VALUES (007 ,'davide', 'Davide', 'Spada', 'Napoli', 'Bologna', '2024-03-19 13:03:27.236215+00', 24, '2024-03-19 13:03:27.236215+00', 1773.69, FALSE, TRUE );
+
+INSERT into messages VALUES ('Hello John Doe, this is the offer token for your flight from BLQ to CPH in date April 10th 11:10 - April 10th 13:30.<a href="#" target="_blank">1234', 'davide','2024-03-19 13:03:27.236215+00');
+INSERT into messages VALUES ('Hello John Doe, this is the offer token for your flight from BLQ to CPH in date April 10th 11:10 - April 11th 13:30.<a href="#" target="_blank">1234', 'davide','2024-03-19 13:03:27.236215+00');
+INSERT into messages VALUES ('Hello John Doe, this is the offer token for your flight from BLQ to CPH in date April 10th 11:10 - April 12th 13:30.<a href="#" target="_blank">1234', 'davide','2024-03-19 13:03:27.236215+00');
+INSERT into messages VALUES ('Hello John Doe, this is the offer token for your flight from BLQ to CPH in date April 10th 11:10 - April 13th 13:30.<a href="#" target="_blank">1234', 'davide','2024-03-19 13:03:27.236215+00');
