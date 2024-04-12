@@ -27,12 +27,19 @@ type registerRequest:void {
   .username[1,1]:string
 }
 
+type sendMessageRequest:void {
+  .expiration[0,1]:string
+  .message[1,1]:string
+  .username[1,1]:string
+}
+
 interface WebPortInterface {
 RequestResponse:
   getMessages( messagesRequest )( undefined ),
   login( loginRequest )( prontoResponse ),
   logout( logoutRequest )( prontoResponse ),
-  register( registerRequest )( prontoResponse )
+  register( registerRequest )( prontoResponse ),
+  sendMessage( sendMessageRequest )( prontoResponse )
 }
 
 

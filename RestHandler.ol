@@ -30,7 +30,6 @@ inputPort HeaderPort {
 execution { concurrent }
 main{
     [incomingHeaderHandler(request)(response){
-
         if ( request.operation == "api/login" ){
             /*splitReq = request.headers.("authorization")
             splitReq.regex = " "

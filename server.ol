@@ -165,8 +165,31 @@ service RestServer {
             }
         }]
     
+        [sendMessage(request)(response) {
+            scope(send){
+                install(
+                    SQLException => response.message="Database error:" ,
+                    UserNotFoundException => response.message="User "+request.username+" not found."
+                            response.status = 1);
 
-
+                queryCheck = "SELECT * FROM users WHERE uname ='"+request.username+"'"
+                query@Database(queryCheck)(checkResponse)
+                if(#checkResponse.row == 0){
+                    response.message = "Username not available."
+                    throw (UsernameNotFoundException)
+                }else{
+                    insertQuery = "INSERT INTO messages VALUES (:message ,:username, :expiration)"
+                    insertQuery.message = request.message
+                    insertQuery.username = request.username
+                    insertQuery.expiration = request.expiration
+                    update@Database(insertQuery)(ret)
+                    if(ret == 0){
+                        throw(SQLException)
+                    }
+                    response.message = "Message sent"
+                }
+            }
+        }]
     }
  
 

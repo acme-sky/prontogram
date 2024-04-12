@@ -46,11 +46,16 @@ type prontoResponse :void{
     .status?:    int
 }
 
-
+type sendMessageRequest{
+    .message:   string
+    .username:      string
+    .expiration?:    string
+}
 interface ProntoInterface{
     RequestResponse:
         login(loginRequest)(prontoResponse),
         getMessages(messagesRequest)(undefined),
         register(registerRequest)(prontoResponse),
         logout(logoutRequest)(prontoResponse),
+        sendMessage(sendMessageRequest)(prontoResponse),
 }

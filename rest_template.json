@@ -14,5 +14,9 @@
     "logout": {
         "method":"post",
         "template": "api/logout"
+    },
+    "sendMessage": {
+        "method":"post",
+        "template": "api/sendMessage"
     }
 }
