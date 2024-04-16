@@ -2,6 +2,7 @@ include "pronto.iol"
 include "console.iol"
 include "string_utils.iol"
 include "database.iol"
+include "time.iol"
 
 execution { concurrent }
 
@@ -148,7 +149,7 @@ service RestServer {
         [logout (request)(response){
             scope(logout){
                 install(
-                    SQLException => println@Console("Database error:" )(),
+                    SQLException => println@Console("Database error" )(),
                     UserNotFoundException => println@Console("User "+request.username+" not found.")()
                             response.status = 1);
                 
@@ -178,10 +179,13 @@ service RestServer {
                     response.message = "Username not available."
                     throw (UsernameNotFoundException)
                 }else{
+                    expiration_timestamp = request.expiration
+                    expiration_timestamp.format = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+                    getTimestampFromString@Time(expiration_timestamp)(timestamp)//2024-03-02T13:10:00Z
                     insertQuery = "INSERT INTO messages VALUES (:message ,:username, :expiration)"
                     insertQuery.message = request.message
                     insertQuery.username = request.username
-                    insertQuery.expiration = request.expiration
+                    insertQuery.expiration = timestamp
                     update@Database(insertQuery)(ret)
                     if(ret == 0){
                         throw(SQLException)
