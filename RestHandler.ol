@@ -1,6 +1,4 @@
 include "console.iol"
-include "string_utils.iol"
-include "converter.iol"
 include "json_utils.iol"
 
 type incomingHeaderHandlerRequest:void{
@@ -31,17 +29,6 @@ execution { concurrent }
 main{
     [incomingHeaderHandler(request)(response){
         if ( request.operation == "api/login" ){
-            /*splitReq = request.headers.("authorization")
-            splitReq.regex = " "
-            split@StringUtils(splitReq)(credentials)
-            //decode credentials
-            base64ToRaw@Converter(credentials.result[1])(decodedCred)
-            rawToString@Converter(decodedCred)(decodedString)
-            splitReq2 = decodedString
-            splitReq2.regex = ":"
-            split@StringUtils(splitReq2)(decodedCredentials)
-            response.username = decodedCredentials.result[0]
-            response.password = decodedCredentials.result[1]*/
             getJsonValue@JsonUtils(request.headers.("data"))(credentials)
             response.username = credentials.username
             response.password = credentials.password

@@ -19,8 +19,6 @@ type ASOffer : void {
 type loginRequest{
     .username: string
     .password: string
-    .headers?:  undefined
-    //.sid?:     string
 }
 
 type logoutRequest{

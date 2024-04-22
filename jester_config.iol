@@ -1,5 +1,4 @@
 type loginRequest:void {
-  .headers[0,1]:undefined
   .password[1,1]:string
   .username[1,1]:string
 }

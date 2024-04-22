@@ -13,7 +13,6 @@ service RestServer {
         protocol: http{
             .format = "json"
             .cookies.session = "sid"
-            //TODO cookies-duration
         }
         interfaces: ProntoInterface
     }
