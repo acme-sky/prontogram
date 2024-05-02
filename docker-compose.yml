@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  pronto-db:
+    image: postgres:latest
+    container_name: prontodb
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_USER=pronto
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=prontodb
+    networks:
+      - prontogram-net
+
+  prontogram-b:
+    image: prontogram-backend
+    build:      
+      dockerfile: ./Dockerfile
+    container_name: prontogram
+    depends_on:
+      - pronto-db
+    ports:
+      - 8000:8000
+    command: jolier server.ol WebPort localhost:8000 -headerHandler
+    restart: unless-stopped
+    networks:
+      - prontogram-net
+
+volumes:
+  db_data:
+    external: true
+
+networks:
+  prontogram-net:
+    driver: bridge
