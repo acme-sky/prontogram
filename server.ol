@@ -3,6 +3,7 @@ include "console.iol"
 include "string_utils.iol"
 include "database.iol"
 include "time.iol"
+include "file.iol"
 
 execution { concurrent }
 
@@ -16,24 +17,23 @@ service RestServer {
         }
         interfaces: ProntoInterface
     }
-
+    
     cset {
         session: prontoResponse.sid logoutRequest.sid messagesRequest.sid
     }
 
     init{
+        
+        //reads needed config.json file in root directory
+        readFile@File({filename = "config.json",format="json"})(config_file)
 
         install(
             ConnectionError => println@Console("Connection error.")()
         );
 
-        //TODO parametric connection with .env 
+        //gets parameters for db from config.json
         with(dbconn){
-            .username = "pronto"
-            .password = "password"
-            .host = "localhost"
-            .database = "prontodb"
-            .driver = "postgresql"
+            dbconn << config_file.database
         }
 
         connect@Database(dbconn)(void)

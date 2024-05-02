@@ -1,0 +1,9 @@
+{
+"database": {
+        "username": "pronto",
+        "password": "password",
+        "host": "pronto-db",
+        "database": "prontodb",
+        "driver": "postgresql"
+    }
+}
