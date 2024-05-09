@@ -38,16 +38,17 @@ main{
             response.password = credentials.password
             response.name = credentials.name
             response.surname = credentials.surname
-        } else if (request.operation == "getMessages" || request.operation == "logout"){
+        } else {//if (request.operation == "api/getMessages" || request.operation == "api/logout"){
                 response.sid = request.headers.cookies.session
-            }
+            } //\{(.*)\}
     }]
 
     [outgoingHeaderHandler(request)(response){
         response.("Access-Control-Allow-Methods") = "POST,GET,DELETE,PUT,OPTIONS"
         response.("Access-Control-Allow-Origin") = "*"
         response.("Access-Control-Allow-Headers") = "Content-Type, Authorization"
-        if(request.operation == "login"){
+        //if(request.operation == "api/login"){
+        if(request.response.sid != ""){
             response.("Set-Cookie") = "session="+request.response.sid
         }
     }]

@@ -19,6 +19,7 @@ type ASOffer : void {
 type loginRequest{
     .username: string
     .password: string
+    .sid?:     string
 }
 
 type logoutRequest{
@@ -47,8 +48,10 @@ type prontoResponse :void{
 type sendMessageRequest{
     .message:   string
     .username:      string
-    .expiration?:    string
+    .expiration:    string
+    .sid?:      string
 }
+
 interface ProntoInterface{
     RequestResponse:
         login(loginRequest)(prontoResponse),
