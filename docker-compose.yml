@@ -24,15 +24,12 @@ services:
       - pronto-db
     ports:
       - 8000:8000
-    command: jolier server.ol WebPort localhost:8000 -headerHandler
+    command: jolier server.ol WebPort localhost:8000 -headerHandler -debug
     restart: unless-stopped
     networks:
       - prontogram-net
 
-volumes:
-  db_data:
-    external: true
-
 networks:
   prontogram-net:
     driver: bridge
+    name: prontogram-net

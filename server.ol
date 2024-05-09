@@ -84,12 +84,13 @@ service RestServer {
                 install(
                     SQLException => println@Console("Database error:" )(),
                     NoCookieException => println@Console("User is not authenticated")());
-                    
 
                     //get username from cookie
                     cookie = request.sid
                     //usable
                     uname = global.users.(cookie).username
+
+                    println@Console("cookie :"+ cookie)()
 
                     //we need this for the openapi specification
                     //uname = request.username
@@ -100,7 +101,7 @@ service RestServer {
                         //messagesQuery = "SELECT * FROM ASOffers WHERE client_username = '"+uname+"'" 
                         messagesQuery = "SELECT * FROM messages WHERE username = '"+uname+"'"
                         query@Database(messagesQuery)(sqlResponse)
-
+                        //println@Console(messagesQuery)()
                         response.messages -> sqlResponse.row
 
                         /*can be used to map offers to an offer structure if needed

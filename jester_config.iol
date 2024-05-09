@@ -1,6 +1,7 @@
 type loginRequest:void {
   .password[1,1]:string
   .username[1,1]:string
+  .sid[0,1]:string
 }
 
 type logoutRequest:void {
@@ -27,9 +28,10 @@ type registerRequest:void {
 }
 
 type sendMessageRequest:void {
-  .expiration[0,1]:string
+  .expiration[1,1]:string
   .message[1,1]:string
   .username[1,1]:string
+  .sid[0,1]:string
 }
 
 interface WebPortInterface {
