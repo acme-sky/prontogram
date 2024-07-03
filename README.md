@@ -7,7 +7,6 @@ First, build the local image
 
 ```
 docker build -t prontogram-backend .
-
 ```
 
 
