@@ -17,7 +17,7 @@ services:
 
   prontogram-b:
     image: prontogram-backend
-    build:      
+    build:
       dockerfile: ./Dockerfile
     container_name: prontogram
     depends_on:
@@ -28,8 +28,11 @@ services:
     restart: unless-stopped
     networks:
       - prontogram-net
+      - acmesky
 
 networks:
   prontogram-net:
     driver: bridge
     name: prontogram-net
+  acmesky:
+    external: true
