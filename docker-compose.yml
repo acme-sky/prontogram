@@ -22,7 +22,7 @@ services:
       - pronto-db
     ports:
       - 8000:8000
-    command: jolier server.ol WebPort localhost:8000 -headerHandler -debug
+    command: jolier server.ol WebPort localhost:8000 -headerHandler
     restart: unless-stopped
     networks:
       - prontogram-net

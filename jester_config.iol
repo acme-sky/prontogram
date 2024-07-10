@@ -25,6 +25,7 @@ type registerRequest:void {
   .surname[1,1]:string
   .name[1,1]:string
   .username[1,1]:string
+  .sid[0,1]:string
 }
 
 type sendMessageRequest:void {
