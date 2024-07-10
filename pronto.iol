@@ -32,6 +32,7 @@ type registerRequest{
     .password: string
     .name:     string
     .surname:  string
+    .sid?:     string
 }
 
 type messagesRequest{
